@@ -103,7 +103,17 @@ Métricas operativas calculadas a partir de las predicciones del modelo y fórmu
 
 * **Punto de Reorden (ROP):**
   $$\text{ROP} = (\text{Demanda Promedio Diaria Predicha} \times \text{Lead Time}) + \text{Safety Stock}$$
+  ## 🛠️ Requisitos e Instalación
+
+### 1. Prerrequisitos
+Asegúrate de tener instalado **Python 3.8** o superior en tu sistema.
+
+### 2. Clonar el Repositorio
+```bash
+git clone [https://github.com/Rrricardi/reabastecimiento-inteligente-de-inventario-ml.git](https://github.com/Rrricardi/reabastecimiento-inteligente-de-inventario-ml.git)
+cd reabastecimiento-inteligente-de-inventario-ml
 
                               References
 
 _ https://pandas.pydata.org/docs/reference/api/pandas.Series.dt.dayofweek.html doumentation librery dayofweek
+_https://lightgbm.readthedocs.io/en/stable/
