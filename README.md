@@ -66,7 +66,43 @@ Resultados generados tras la inferencia del modelo y aplicación de fórmulas de
 * safety_stock       (FLOAT): Inventario de seguridad calculado para un nivel de servicio del 95% (unidades).
 * reorder_point (ROP)(FLOAT): Punto de reorden que activa la orden de compra al proveedor (unidades).
 
+                                  Diccionario de Variables
 
+###. Variables de Ingeniería de Características (*Feature Engineering*)
+Variables temporales y estadísticas calculadas dinámicamente para alimentar el modelo predictivo:
+
+| Variable | Tipo de Dato | Descripción |
+| :--- | :--- | :--- |
+| `dayofweek` | Entero (0 - 6) | Día de la semana (0 = Lunes, 6 = Domingo). |
+| `month` | Entero (1 - 12) | Mes del año. |
+| `is_weekend` | Binario (0 / 1) | Indica si el día corresponde a fin de semana (1) o día laborable (0). |
+| `sales_lag_X` | Flotante | Ventas históricas registradas hace `X` días (`lag_7`, `lag_14`, `lag_21`, `lag_28`, `lag_30`). |
+| `rolling_mean_7` | Flotante | Promedio móvil de ventas de los últimos 7 días (excluyendo el día actual para evitar *Data Leakage*). |
+| `rolling_std_7` | Flotante | Desviación estándar de las ventas de los últimos 7 días (mide la volatilidad a corto plazo). |
+| `rolling_mean_30` | Flotante | Promedio móvil de ventas de los últimos 30 días (captura tendencias a mediano plazo). |
+
+---
+
+###  Resultados de Políticas de Inventario (`inventory_policy.csv`)
+Métricas operativas calculadas a partir de las predicciones del modelo y fórmulas de Supply Chain:
+
+| Variable | Tipo de Dato | Descripción |
+| :--- | :--- | :--- |
+| `family` | Texto | Categoría o familia de productos evaluada. |
+| `daily_demand_pred` | Flotante | Demanda promedio diaria proyectada por el modelo de ML para los próximos días. |
+| `safety_stock` | Flotante | **Stock de Seguridad:** Cantidad mínima de inventario de reserva necesaria para absorber variaciones inesperadas de la demanda o retrasos del proveedor (calculado para un Nivel de Servicio del 95%). |
+| `reorder_point (ROP)`| Flotante | **Punto de Reorden:** Nivel crítico de inventario en almacén. Cuando el stock disponible cae a esta cifra, se debe emitir inmediatamente una nueva orden de compra al proveedor. |
+
+---
+
+## 🧮 Fórmulas Utilizadas
+
+* **Stock de Seguridad:**
+  $$\text{Safety Stock} = Z \times \sigma_{\text{error}} \times \sqrt{\text{Lead Time}}$$
+  * *Donde $Z = 1.65$ (Nivel de servicio del 95%), $\sigma_{\text{error}}$ es la desviación estándar de los errores del pronóstico, y $\text{Lead Time} = 7 \text{ días}$.*
+
+* **Punto de Reorden (ROP):**
+  $$\text{ROP} = (\text{Demanda Promedio Diaria Predicha} \times \text{Lead Time}) + \text{Safety Stock}$$
 
                               References
 
